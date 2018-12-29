@@ -1,0 +1,30 @@
+{
+    "websites": {
+        "edX": {
+            "urls": {
+                "base_url": "https://courses.edx.org/",
+                "first_url": "https://courses.edx.org/login",
+                "login_url": "https://courses.edx.org/user_api/v1/account/login_session/",
+                "dashboard_url": "https://courses.edx.org/dashboard"
+            },
+            "headers": {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:64.0) Gecko/20100101 Firefox/64.0",
+                "Accept": "*/*",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Referer": "https://courses.edx.org/login",
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "X-Requested-With": "XMLHttpRequest",
+                "DNT": "1",
+                "Connection": "keep-alive"
+            }
+
+        },
+
+        "Coursera": {
+            "urls": {
+                "base_url": "https://www.coursera.org"
+            }
+        }
+    }
+}
