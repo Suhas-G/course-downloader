@@ -3,22 +3,30 @@ from PyQt5.QtWidgets import QListView
 
 
 class CourseListView(QListView):
-    def __init__(self):
+    def __init__(self, application):
         super().__init__()
+        self.application = application
         self.model = QStandardItemModel(self)
         self.model.itemChanged.connect(self.course_selection_changed)
         self.setModel(self.model)
         self.courses = {}
         self.selected_courses = set()
 
-    def add_course(self, course_name):
-        course_item = QStandardItem(course_name)
+    def add_course(self, course):
+        name = course.name + " | " + course.university + " | " + course.date
+        course_item = QStandardItem(name)
+        course_item.setData({"data-course-key": course.data_course_key})
+        course_item.setEditable(False)
         course_item.setCheckable(True)
         self.model.appendRow(course_item)
-        self.courses[course_name] = self.model.rowCount()
+        self.courses[course.data_course_key] = course
 
     def course_selection_changed(self, course_item):
+        self.application.course_selection_changed()
         if course_item.checkState():
-            self.selected_courses.add(str(course_item.text()))
-        elif(str(course_item.text()) in self.selected_courses):
-            self.selected_courses.remove(str(course_item.text()))
+            self.selected_courses.add(course_item.data()["data-course-key"])
+        elif(course_item.data()["data-course-key"] in self.selected_courses):
+            self.selected_courses.remove(course_item.data()["data-course-key"])
+
+    def clear_all(self):
+        self.model.clear()

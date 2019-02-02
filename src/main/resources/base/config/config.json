@@ -2,7 +2,7 @@
     "websites": {
         "edX": {
             "urls": {
-                "base_url": "https://courses.edx.org/",
+                "base_url": "https://courses.edx.org",
                 "first_url": "https://courses.edx.org/login",
                 "login_url": "https://courses.edx.org/user_api/v1/account/login_session/",
                 "dashboard_url": "https://courses.edx.org/dashboard"
@@ -19,12 +19,6 @@
                 "Connection": "keep-alive"
             }
 
-        },
-
-        "Coursera": {
-            "urls": {
-                "base_url": "https://www.coursera.org"
-            }
         }
     }
 }

@@ -1,3 +1,4 @@
+# Labels used on GUI
 APPLICATION_NAME = "Course Downloader"
 WEBSITE_LOGIN_LABEL = "Login to a website"
 DASHBOARD_LABEL = "Download"
@@ -8,27 +9,44 @@ PASSWORD_LABEL = "Password"
 WEBSITE_URL_LABEL = "URL"
 COURSE_LIST_TITLE = "List of courses"
 COURSE_STRUCTURE_TITLE = "Course Structure"
+ROOT_FOLDER_LABEL = "Select a directory"
+ROOT_FOLDER_PATH_LABEL = "Path to folder"
+RETRIEVE_COURSES_LABEL = "Retrieve Course(s)"
+DOWNLOAD_COURSES_LABEL = "Download Course(s)"
+COURSES_LABEL = "Courses"
+LOGIN_LABEL = "Login"
+CANCEL_LABEL = "Cancel"
+CANCELLING_LABEL = "Cancelling..."
+LOADING_LABEL = "Loading..."
+BROWSE_LABEL = "..."
+
+# Parameters used on GUI
 WINDOW_SIZE = (1000, 900)
 VERTICAL_SPACING = 30
 HORIZONTAL_SPACING = 10
-TIME_INPUT_LABEL = 'Time Limit (in minutes)'
-FONT_NAME = 'Monospace'
-FONT_SIZE = 10
-TIME_LIMIT_MINIMUM = 1
-TIME_LIMIT_MAXIMUM = 120
-START_BUTTON_LABEL = 'Start'
-STOP_BUTTON_LABEL = 'Stop'
-POSITION_LEFT = 180
-POSITION_TOP = 90
-POSITION_RIGHT = 0
-POSITION_BOTTOM = -90
-DEFAULT_MARGIN = 8
-DEFAULT_PEN_WIDTH = 16
-SIDE_FRACTION = 0.96
-PYQT_ANGLE_PRECISION = 16
-FULL_ANGLE = 360
-
 FORM_HORIZONTAL_SPACING = 50
 FORM_VERTICAL_SPACING = 15
+PROGRESSBAR_MINIMUM = 0
+PROGRESSBAR_MAXIMUM = 100
 
+# Types of Error messages
+INFORMATION = 'Information'
+WARNING = 'Warning'
+CRITICAL = 'Critical'
+
+# File paths used
 CONFIG_FILE = "config/config.json"
+LOADING_GIF = "images/loading.gif"
+DOWNLOAD_DATA = "downloads.json"
+MEDIA_ICON = "images/media_icon.svg"
+SESSION_LOG = "session.log"
+
+# constants used while downloading videos
+RETRY_LIMIT = 5
+WINDOWS_EXCLUDED_CHARACTERS = '":?*<>|'
+YOUTUBE_URL_PART = "https://www.youtube.com/watch?v="
+
+# Types of media on webpage recognised
+VIDEO = "seq_video"
+OTHER = "seq_other"
+PROBLEM = "seq_problem"
