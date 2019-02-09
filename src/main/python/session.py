@@ -29,6 +29,13 @@ class Session(QObject):
     course_selection_required = pyqtSignal(str, str, str)
 
     def __init__(self, configuration, application_context, website_name):
+        """Initialise the session for downloading
+        
+        Arguments:
+            configuration {Configuration} -- Configuration object having data about website
+            application_context {ApplicationContext} -- Reference to application context
+            website_name {str} -- Name of the website
+        """
         super().__init__()
         self.configuration = configuration
         self.application_context = application_context
@@ -38,21 +45,45 @@ class Session(QObject):
         self.cancelled = False
 
     def change_website(self, website_name):
+        """Change the website downloader
+        
+        Arguments:
+            website_name {str} -- Name of the website
+        """
         self.website = website_name
         self.set_downloader(website_name)
 
     def set_downloader(self, website_name):
+        """Set the appropriate downloader class for the website name.
+        Currently only edX is supported
+        
+        Arguments:
+            website_name {str} -- Name of the website
+        """
         if website_name == "edX":
             self.downloader = EdXDownloader(self.configuration)
         else:
             self.downloader = None
 
     def set_credentials(self, username, password):
+        """Store the username and password for the session
+        
+        Arguments:
+            username {str} -- The username of the user
+            password {str} -- The password of the user
+        """
         self.username = username
         self.password = password
 
     @pyqtSlot('QListView', 'QPushButton', 'QLineEdit')
     def action_button_clicked(self, course_list_widget, action_button, root_folder_input):
+        """[summary]
+        
+        Arguments:
+            course_list_widget {[type]} -- [description]
+            action_button {[type]} -- [description]
+            root_folder_input {[type]} -- [description]
+        """
         if(str(action_button.text()) == RETRIEVE_COURSES_LABEL and len(course_list_widget.selected_courses) > 0):
             action_button.setText(DOWNLOAD_COURSES_LABEL)
             self.retrieve_course_details(course_list_widget)
@@ -69,6 +100,13 @@ class Session(QObject):
 
     @pyqtSlot('QLineEdit', 'QLineEdit')
     def login(self, username, password):
+        """Callback when the Login button is pressed
+        Show the loading screen, login to the website and close the loading screen
+
+        Arguments:
+            username {QLineEdit} -- Input field for username
+            password {QLineEdit} -- Input field for password
+        """
         self.clear_course_list.emit()
         self.loading_screen.emit(True)
         self.set_credentials(username.text(), password.text())
@@ -77,6 +115,12 @@ class Session(QObject):
         self.login_successful.emit(successful)
 
     def retrieve_course_details(self, course_list_widget):
+        """Get the details for all selected courses.
+        Show the loading screen, get all details, close the loading screen.
+        
+        Arguments:
+            course_list_widget {CourseListView} -- The course list view widget
+        """
         self.clear_course_structure.emit()
         self.loading_screen.emit(True)
         self.data["selected_courses"] = course_list_widget.selected_courses
@@ -86,9 +130,17 @@ class Session(QObject):
         self.courses_retrieved.emit(successful)
 
     def cancel_pressed(self):
+        """Set the cancelled flag to True when the Cancel button is pressed
+        """
         self.cancelled = True
 
     def download_courses(self, course_list_widget, root_folder):
+        """Downloaded the lecture videos of all selected courses
+        If any error occurs tries again until RETRY_LIMIT is reached.
+        Arguments:
+            course_list_widget {CourseListView} -- The course list view widget
+            root_folder {str} -- The destination folder selected for the downloads
+        """
         downloaded = False
         try_count = 0
         download_count = 0
@@ -115,6 +167,16 @@ class Session(QObject):
         self.courses_downloaded.emit(downloaded)
 
     def _download_lecture(self, course_outline, section, subsection, course_id, root_folder, download_count):
+        """Download the lecture video
+        
+        Arguments:
+            course_outline {dict} -- The course structure having sections, subsections and lectures (default: {OrderedDict()})
+            section {str} -- Section of the lecture
+            subsection {str} -- Subsection of the lecture
+            course_id {str} -- Course ID of the lecture
+            root_folder {str} -- The destination folder selected for the downloads
+            download_count {int} -- Download count to track progress
+        """
         for index, lecture_url in enumerate(course_outline[section][subsection]):
             path = Path(root_folder, self.downloader.courses[course_id].name,
                         section, subsection)
@@ -130,12 +192,10 @@ class Session(QObject):
                 course_id, section, subsection, self.downloader.courses[course_id], lecture, root_folder)
 
             if lecture.media_type == VIDEO and (not downloaded):
-                lecture = self.downloader.set_lecture_path(
-                    lecture_title, lecture_url, path)
+                lecture = self.downloader.set_lecture_path(lecture_url, path)
                 successful = utils.download_lecture(lecture)
                 if (successful):
-                    lecture = self.downloader.set_lecture_downloaded(
-                        lecture_title, lecture_url)
+                    lecture = self.downloader.set_lecture_downloaded(lecture_url)
                     utils.save_downloads(
                         course_id, section, subsection, self.downloader.courses[course_id], lecture, root_folder)
 

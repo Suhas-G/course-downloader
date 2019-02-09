@@ -5,6 +5,13 @@ from PyQt5.QtWidgets import QDialog, QLabel, QVBoxLayout
 
 class LoadingScreen(QDialog):
     def __init__(self, parent, file_path, text):
+        """Initialise the loading screen
+        
+        Arguments:
+            parent {QObject} -- The parent QObject
+            file_path {str} -- Path to file of loading GIF
+            text {str} -- Text to be shown on the loading screen
+        """
         super().__init__(parent)
         self.file = file_path
         self.text = text
@@ -14,6 +21,8 @@ class LoadingScreen(QDialog):
         self.init_UI()
 
     def init_UI(self):
+        """Initialise the UI by loading the GIF and adding the text label
+        """
         vbox = QVBoxLayout()
         vbox.setAlignment(Qt.AlignHCenter)
         self.movie_screen = QLabel(self)

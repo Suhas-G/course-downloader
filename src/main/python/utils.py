@@ -9,30 +9,21 @@ import youtube_dl
 import requests
 from PyQt5.QtWidgets import QFrame
 
-from constants import WINDOWS_EXCLUDED_CHARACTERS
+from constants import WINDOWS_EXCLUDED_CHARACTERS, DOWNLOAD_DATA
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-class QHLine(QFrame):
-    def __init__(self):
-        super().__init__()
-        self.setFrameShape(QFrame.HLine)
-        self.setFrameShadow(QFrame.Sunken)
-
-
-class QVLine(QFrame):
-    def __init__(self):
-        super().__init__()
-        self.setFrameShape(QFrame.VLine)
-        self.setFrameShadow(QFrame.Sunken)
-
 class BreakLoop(Exception):
+    """Dummy exception to break out of nested loops
+    """
     pass
 
 def is_downloadable(url):
-    """
-    Does the url contain a downloadable resource
+    """Does the url contain a downloadable resource
+    
+    Arguments:
+        url {str} -- URL to check whether it can be downloaded
     """
     req = requests.head(url, allow_redirects=True)
     headers = req.headers
@@ -44,18 +35,14 @@ def is_downloadable(url):
         return False
     return True
 
-def get_filename_from_cd(cd):
-    """
-    Get filename from content-disposition
-    """
-    if not cd:
-        return None
-    fname = re.findall('filename=(.+)', cd)
-    if len(fname) == 0:
-        return None
-    return fname[0]
-
 def download_file(url, path, title):
+    """Download the file
+    
+    Arguments:
+        url {str} -- URL to the file
+        path {Path} -- File path to which it'll be downloaded 
+        title {str} -- Name of the file
+    """
     if is_downloadable(url):
         try:
             req = requests.get(url, allow_redirects=True)
@@ -70,17 +57,30 @@ def download_file(url, path, title):
         return False
 
 def download_from_youtube(url, path, title):
+    """Download video from youtube using youtube-dl
+    Reference: https://rg3.github.io/youtube-dl/
+    
+    Arguments:
+        url {str} -- Youtube URL
+        path {Path} -- File path to which it'll be downloaded
+        title {str} -- Name of the file
+    """
     file_path = str(Path(path, title)) + ".%(ext)s"
     ydl_options = {
         'outtmpl': file_path
     }
     with youtube_dl.YoutubeDL(ydl_options) as ydl:
         ydl.download([url])
-    print("Downloaded")
     return True
 
 
 def download_lecture(lecture):
+    """Util method to download the lecture.
+    Checks whether its a file URL or if its YouTube link and calls appropriate function
+    
+    Arguments:
+        lecture {Lecture} -- The Lecture object having required details
+    """
     url = lecture.download_url
     path = Path(lecture.path.parts[0], *[re.sub('[' + WINDOWS_EXCLUDED_CHARACTERS + ']', '', part) for part in lecture.path.parts[1:]])
     title = re.sub('[' + WINDOWS_EXCLUDED_CHARACTERS + ']', '', lecture.title)
@@ -94,14 +94,29 @@ def download_lecture(lecture):
     return successful
 
 def ensure_directory_exists(path):
+    """Util method to check whether the path exists and if not make necessary directories
+    
+    Arguments:
+        path {str} -- Path to be checked
+    """
     if not Path(path).exists():
         os.makedirs(str(path))
 
 
 def save_downloads(course_id, section, subsection, course, lecture, root_folder):
+    """Util method to save the state of the downloads in a JSON file
+    
+    Arguments:
+        course_id {str} -- Course ID of the lecture
+        section {str} -- Section of the lecture
+        subsection {str} -- Subsection of the lecture
+        course {Course} -- Selected Course object having all its details
+        lecture {Lecture} -- Downloaded Lecture object having all its details
+        root_folder {str} -- The destination folder selected for the downloads
+    """
     ensure_directory_exists(root_folder)
-    if Path(root_folder, "downloads.json").exists():
-        with Path(root_folder, "downloads.json").open() as file:
+    if Path(root_folder, DOWNLOAD_DATA).exists():
+        with Path(root_folder, DOWNLOAD_DATA).open() as file:
             downloads = json.load(file)
     else:
         downloads = {
@@ -120,12 +135,22 @@ def save_downloads(course_id, section, subsection, course, lecture, root_folder)
     course_data["sections"][section][subsection] = course_data["sections"][section].get(subsection, {})
     course_data["sections"][section][subsection][lecture.url] = lecture_data
     downloads[course_id] = course_data
-    with Path(root_folder, "downloads.json").open(mode="w") as file:
+    with Path(root_folder, DOWNLOAD_DATA).open(mode="w") as file:
         json.dump(downloads, file, indent=4)
 
 def is_downloaded(course_id, section, subsection, course, lecture, root_folder):
+    """util method to check if the lecture has already been downloaded
+    
+    Arguments:
+        course_id {str} -- Course ID of the lecture
+        section {str} -- Section of the lecture
+        subsection {str} -- Subsection of the lecture
+        course {Course} -- Selected Course object having all its details
+        lecture {Lecture} -- Downloaded Lecture object having all its details
+        root_folder {str} -- The destination folder selected for the downloads
+    """
     downloaded = False
-    path = Path(root_folder, "downloads.json")
+    path = Path(root_folder, DOWNLOAD_DATA)
     if path.exists():
         with path.open() as file:
             data = json.load(file)

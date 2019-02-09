@@ -4,6 +4,16 @@ from collections import OrderedDict
 class Course(object):
     def __init__(self, name=None, url=None, data_course_key=None,
                  university=None, date=None, course_outline=OrderedDict()):
+        """Initialise the course object
+        
+        Keyword Arguments:
+            name {str} -- Name of the course (default: {None})
+            url {str} -- URL of the course page (default: {None})
+            data_course_key {str} -- Unique ID/key of the course (default: {None})
+            university {str} -- University offering the course (default: {None})
+            date {str} -- date of the course (starting/ending) (default: {None})
+            course_outline {OrderedDict} -- The course structure having sections, subsections and lectures (default: {OrderedDict()})
+        """
         self.name = name
         self.url = url
         self.data_course_key = data_course_key
@@ -22,6 +32,17 @@ class Course(object):
 class Lecture(object):
     def __init__(self, title=None, url=None, downloaded=False, media_type=None,
                  download_url=None, from_youtube=False, path=None):
+        """Initialise the Lecture object
+        
+        Keyword Arguments:
+            title {str} -- Title of the lecture (default: {None})
+            url {[type]} -- URL of the lecture page (default: {None})
+            downloaded {bool} -- Flag to indicate if downloaded (default: {False})
+            media_type {str} -- Type of lecture: (VIDEO, PROBLEM, OTHER) (default: {None})
+            download_url {str} -- URL to the lecture video (default: {None})
+            from_youtube {bool} -- Flag to indicate whether the video is from YouTube (default: {False})
+            path {Path} -- File path where the video has to be downloaded (default: {None})
+        """
         self.title = title
         self.url = url
         self.downloaded = downloaded
@@ -31,6 +52,8 @@ class Lecture(object):
         self.path = path
 
     def get_dict(self):
+        """Convert the attributes to dict
+        """
         data = {
             "title": self.title,
             "url": self.url,
