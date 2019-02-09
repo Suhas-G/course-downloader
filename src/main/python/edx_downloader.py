@@ -67,6 +67,10 @@ class EdXDownloader(object):
             course_date = course_details.find(
                                     attrs={"class": "info-date-block"})
 
+            # If any of the data is missing itll probably not be available to download so dont include.
+            if None in (course_link, course_university, course_date):
+                continue
+
             if "data-string" in course_date.attrs and "data-datetime" in course_date.attrs:
                 date = course_date["data-string"].replace(
                                     "{date}", course_date["data-datetime"].split("T")[0])
