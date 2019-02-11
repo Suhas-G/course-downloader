@@ -77,12 +77,12 @@ class Session(QObject):
 
     @pyqtSlot('QListView', 'QPushButton', 'QLineEdit')
     def action_button_clicked(self, course_list_widget, action_button, root_folder_input):
-        """[summary]
+        """Callback when the Retrieve courses or Download courses button is clicked
         
         Arguments:
-            course_list_widget {[type]} -- [description]
-            action_button {[type]} -- [description]
-            root_folder_input {[type]} -- [description]
+            course_list_widget {CourseListView} -- Course list object
+            action_button {QButton} -- Reference to the button clicked
+            root_folder_input {QLineEdit} -- Textfield containing the location to where download files
         """
         if(str(action_button.text()) == RETRIEVE_COURSES_LABEL and len(course_list_widget.selected_courses) > 0):
             action_button.setText(DOWNLOAD_COURSES_LABEL)
