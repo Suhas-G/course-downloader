@@ -1,4 +1,4 @@
-name: pyqt_apps
+name: course_downloader
 channels:
   - anaconda
   - conda-forge
