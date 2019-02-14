@@ -177,8 +177,14 @@ class EdXDownloader(object):
             if lecture_inner is None:
                 return None
 
-            download_url = lecture_inner.find(
-                attrs={"data-usage-id": data_id}).select_one(".video-download-button")
+            course_xblock = lecture_inner.find(attrs={"data-usage-id": data_id}) 
+            if course_xblock == None:
+                course_xblock = lecture_inner.find(attrs={"data-usage-id": data_id.replace('/', ';_')})
+            
+            if course_xblock is None:
+                return None
+
+            download_url = course_xblock.select_one(".video-download-button")
             youtube_url = False
             if (download_url == None):
                 youtube_regex = re.compile(r'streams.*#34[\s\S]*?#34;1.\d*\:(.*?)&#34')
@@ -204,13 +210,13 @@ class EdXDownloader(object):
 
         return self.lectures[lecture_url]
 
-    def set_lecture_downloaded(self, lecture_url):
+    def set_lecture_downloaded(self, lecture_url, downloaded=True):
         """Set the particular lecture as downloaded
         
         Arguments:
             lecture_url {str} -- URL of the lecture
         """
-        self.lectures[lecture_url].downloaded = True
+        self.lectures[lecture_url].downloaded = downloaded
         return self.lectures[lecture_url]
 
     def set_lecture_path(self, lecture_url, path):
