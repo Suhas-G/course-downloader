@@ -6,7 +6,7 @@ channels:
 dependencies:
   - beautifulsoup4=4.6.3=py35_0
   - python=3.5.3=3
-  - requests=2.13.0=py35_0
+  - requests
   - setuptools=40.2.0=py35_0
   - six=1.11.0=py35_1
   - pip=10.0.1=py35_0
