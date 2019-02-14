@@ -14,11 +14,20 @@ ROOT_FOLDER_PATH_LABEL = "Path to folder"
 RETRIEVE_COURSES_LABEL = "Retrieve Course(s)"
 DOWNLOAD_COURSES_LABEL = "Download Course(s)"
 COURSES_LABEL = "Courses"
+STATUS_LABEL = "Status"
 LOGIN_LABEL = "Login"
 CANCEL_LABEL = "Cancel"
 CANCELLING_LABEL = "Cancelling..."
 LOADING_LABEL = "Loading..."
 BROWSE_LABEL = "..."
+BLANK_VALUE = "-"
+NOT_VIDEO_TEXT = "Not a Video"
+DOWNLOADED_TEXT = "Downloaded"
+NOT_DOWNLOADED_TEXT = "Not downloaded"
+
+# Other numeric values used in GUI
+COURSES_INDEX = 0
+STATUS_INDEX = 1
 
 # Parameters used on GUI
 WINDOW_SIZE = (1000, 900)

@@ -357,6 +357,7 @@ class DownloaderWindow(QMainWindow):
             fraction_completed {float} -- The fraction of total videos downloaded. (Below 1)
         """
         self.progressbar.setValue(fraction_completed*PROGRESSBAR_MAXIMUM)
+        self.course_structure.update_lecture_status(self.session.downloader.lectures)
 
     def cancel_pressed(self):
         """Callback when the cancel button is pressed.

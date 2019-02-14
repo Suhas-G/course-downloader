@@ -190,7 +190,8 @@ class Session(QObject):
                 continue
             downloaded = utils.is_downloaded(
                 course_id, section, subsection, self.downloader.courses[course_id], lecture, root_folder)
-
+            self.downloader.set_lecture_downloaded(lecture_url, downloaded=downloaded)
+            
             if lecture.media_type == VIDEO and (not downloaded):
                 lecture = self.downloader.set_lecture_path(lecture_url, path)
                 successful = utils.download_lecture(lecture)

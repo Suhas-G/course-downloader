@@ -1,5 +1,5 @@
 from collections import OrderedDict
-
+from constants import VIDEO, BLANK_VALUE, NOT_VIDEO_TEXT, DOWNLOADED_TEXT, NOT_DOWNLOADED_TEXT
 
 class Course(object):
     def __init__(self, name=None, url=None, data_course_key=None,
@@ -50,6 +50,19 @@ class Lecture(object):
         self.download_url = download_url
         self.from_youtube = from_youtube
         self.path = path
+    
+    @property
+    def status(self):
+        """Return the status of lecture depending on media type and whether its downloaded
+        """
+        if self.media_type is None:
+            return BLANK_VALUE
+        elif self.media_type != VIDEO:
+            return NOT_VIDEO_TEXT
+        elif self.downloaded:
+            return DOWNLOADED_TEXT
+        else:
+            return NOT_DOWNLOADED_TEXT
 
     def get_dict(self):
         """Convert the attributes to dict
