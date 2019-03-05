@@ -20,6 +20,9 @@ A GUI tool to download videos from edX
 5. Now press on "Download Course(s)" button.
 6. Wait until it completes.
 
+>Note: For linux users <br>
+> Use ```sudo dpkg -i target/Course Downloader.deb``` to install. This places it in /opt/Course Downloader. To uninstall it again, you can use: `sudo dpkg --purge "Course Downloader"`
+
 ---
 
 ## How to setup on your machine?
